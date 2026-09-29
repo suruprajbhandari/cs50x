@@ -1,0 +1,106 @@
+<!-- CS50x Final Project - Developed by Surup Rajbhandari (Kathmandu, Nepal). Built with assistance from Antigravity IDE / AI tools for UI scaffolding and route structuring, in accordance with CS50x Final Project AI policy. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nepal & Cross-Border Disaster Tracker</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="app-header">
+        <div class="logo">
+            <h1>Disaster Tracker <span>| Command Center</span></h1>
+        </div>
+        <div class="stats-panel">
+            <div class="stat-box">
+                <span class="stat-label">Live API Status</span>
+                <span class="stat-value" id="api-status" style="font-size: 1rem; color: #94a3b8;">Connecting...</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Total Reports</span>
+                <span class="stat-value" id="total-reports">{{ total_reports }}</span>
+            </div>
+            <div class="stat-box alert-box">
+                <span class="stat-label">Critical Alerts</span>
+                <span class="stat-value" id="critical-alerts">{{ critical_alerts }}</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-grid">
+        <!-- Sidebar for Controls and Reporting -->
+        <aside class="sidebar">
+            <section class="controls-section">
+                <h3>Filters & Search</h3>
+                <input type="text" id="search-input" placeholder="Search by location..." class="search-bar">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="earthquakes">Earthquakes (Live)</button>
+                    <button class="filter-btn" data-filter="hydro">Hydrology (Live)</button>
+                    <button class="filter-btn" data-filter="community">Community Reports</button>
+                </div>
+            </section>
+
+            <section class="report-section">
+                <h3>Report a Hazard</h3>
+                <p class="help-text">Click anywhere on the map to autofill coordinates.</p>
+                <form id="report-form">
+                    <div class="form-group">
+                        <input type="text" id="title" placeholder="Incident Title" required>
+                    </div>
+                    <div class="form-group row">
+                        <select id="category" required>
+                            <option value="" disabled selected>Category</option>
+                            <option value="Flood">Flood</option>
+                            <option value="Landslide">Landslide</option>
+                            <option value="Earthquake">Earthquake</option>
+                            <option value="Roadblock">Roadblock</option>
+                        </select>
+                        <select id="severity" required>
+                            <option value="" disabled selected>Severity</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="location_name" placeholder="Location Name" required>
+                    </div>
+                    <div class="form-group row">
+                        <input type="number" id="latitude" placeholder="Latitude" step="any" required readonly>
+                        <input type="number" id="longitude" placeholder="Longitude" step="any" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="description" placeholder="Description of the incident..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="reporter_name" placeholder="Your Name / Organization" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Report</button>
+                </form>
+            </section>
+        </aside>
+
+        <!-- Main Map Area -->
+        <section class="map-container">
+            <div id="map"></div>
+        </section>
+
+        <!-- Incident Feed -->
+        <aside class="feed-sidebar">
+            <h3>Recent Incidents</h3>
+            <div id="incident-feed" class="incident-feed">
+                <!-- Feed items will be populated here via JS -->
+            </div>
+        </aside>
+    </main>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
